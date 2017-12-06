@@ -1,4 +1,4 @@
-﻿//========= Copyright 2015, Valve Corporation, All rights reserved. ===========
+﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 //
 // Purpose: Sets cubemap to use in the compositor.
 //
@@ -11,6 +11,14 @@ public class SteamVR_Skybox : MonoBehaviour
 {
 	// Note: Unity's Left and Right Skybox shader variables are switched.
 	public Texture front, back, left, right, top, bottom;
+
+	public enum CellSize
+	{
+		x1024, x64, x32, x16, x8
+	}
+	public CellSize StereoCellSize = CellSize.x32;
+
+	public float StereoIpdMm = 64.0f;
 
 	public void SetTextureByIndex(int i, Texture t)
 	{
@@ -73,7 +81,7 @@ public class SteamVR_Skybox : MonoBehaviour
 			for (int i = 0; i < 6; i++)
 			{
 				textures[i].handle = (handles[i] != null) ? handles[i].GetNativeTexturePtr() : System.IntPtr.Zero;
-				textures[i].eType = SteamVR.instance.graphicsAPI;
+				textures[i].eType = SteamVR.instance.textureType;
 				textures[i].eColorSpace = EColorSpace.Auto;
 			}
 			var error = compositor.SetSkyboxOverride(textures);
